@@ -1,8 +1,8 @@
 import os
 import argparse
 
-from fileio import load_E_field
-from utils import single_direction_RCS
+from info_io import load_E_field
+from utils import single_direction_RCS, total_RCS
 
 
 def main():
@@ -19,14 +19,19 @@ def main():
     parser.add_argument('--R', '-R', default=1, type=float, help='Incidence phi angle')
     args = parser.parse_args()
 
-    E_field_table = load_E_field(os.path.join(args.path, 'E-field.txt'))
+    for root, directories, files in os.walk(args.path):
+        # Detect E_field txt
+        for filename in files:
+            if filename[0:2] == 'E_' and filename[-4:] == '.txt':
+                E_field_table, sample_num, frequency = load_E_field(os.path.join(args.path, filename))
+
 
     RCS_table = {}
     for angles, E_field_list in E_field_table.items():
         RCS_table[angles] = single_direction_RCS(args.R, E_field_list[0], E_field_list[1], args.Ei)
-    print(RCS_table)
+    total_RCS_value = total_RCS(RCS_table, sample_num[0], sample_num[1])
+    print('When Incidence theta angle Θ=', args.theta)
 
 
 if __name__ == "__main__":
-    # 确保脚本在被导入时不会立即执行
     main()
