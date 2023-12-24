@@ -50,7 +50,7 @@ python main.py -E 1 -theta 0 -phi 0 -R 1
 
 ## Contributors
 
-- Zhang Yezheng（https://github.com/pxxxl）
-- Li Zhiwei （https://github.com/mj3622）
+- Zhang Yezheng（ https://github.com/pxxxl ）
+- Li Zhiwei （ https://github.com/mj3622 ）
 - Wei Yifan
 - Chen Shuaifan
