@@ -31,7 +31,7 @@ python main.py -E 1 -theta 0 -phi 0 -R 1
 
 ## Contributors
 
-Zhang Yezheng
-Li Zhiwei
-Wei Yifan
-Chen Shuaifan
+- Zhang Yezheng
+- Li Zhiwei
+- Wei Yifan
+- Chen Shuaifan
