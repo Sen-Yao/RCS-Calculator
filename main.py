@@ -13,7 +13,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--unit', '-u', default='degree', type=str, help='angle unit')
     parser.add_argument('--path', default='data', type=str, help='path to data folder')
-    parser.add_argument('--Ei', '-E', default=1, type=float, help='Incidence electric field')
+    parser.add_argument('--Ei', '-E', default=1, type=float, help='Mode of incident electric field')
     parser.add_argument('--theta', '-t', default=0, type=float, help='Incidence theta angle')
     parser.add_argument('--phi', '-p', default=0, type=float, help='Incidence phi angle')
     parser.add_argument('--R', '-R', default=1, type=float, help='Incidence phi angle')
