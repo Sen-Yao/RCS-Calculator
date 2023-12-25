@@ -1,7 +1,7 @@
 import os
 import argparse
 
-from info_io import load_E_field, single_RCS_output, load_RCS
+from info_io import load_E_field, single_RCS_output, load_RCS, rcs_to_dB
 from RCS_Table import RCS_Table
 
 
@@ -32,26 +32,27 @@ def main():
                 Table = RCS_Table(args.R, args.Ei)
                 Table.E_table, Table.sample_num, Table.frequency = load_E_field(os.path.join(args.path, filename))
                 Table.frequency_str = filename[2:-4]
+                Table.renew_frequency_str()
 
+                Table.remove_redundancy_table()
                 Table.calculate_single_direction_RCS()
-
                 Table.calculate_total_RCS()
+
                 RCS_Table_list.append(Table)
-            if filename[0:4] == 'RCS_' and filename[-4:] == '.txt':
+
+            elif filename[0:4] == 'RCS_' and filename[-4:] == '.txt':
                 for Table in RCS_Table_list:
                     if Table.frequency_str == filename[4:-4]:
                         Table.CST_table = load_RCS(os.path.join(args.path, filename))
                         Table.check_single_RCS()
 
+    RCS_Table_list.sort(key=lambda x: x.frequency)
     for Table in RCS_Table_list:
-        if 1000 < Table.frequency < 1000000:
-            frequency_str = str(int(Table.frequency/1000))+'kHz'
-        elif 1000000 < Table.frequency < 1000000000:
-            frequency_str = str(int(Table.frequency / 1000000)) + 'MHz'
-        else:
-            frequency_str = str(int(Table.frequency))+'Hz'
+        print('When Frequency =', Table.frequency_str + 'Hz, the total RCS =', Table.total_RCS,
+              'or', rcs_to_dB(Table.total_RCS), 'dB')
 
-        print('When Frequency =', frequency_str+', the total RCS =', Table.total_RCS)
+
+
 
 
 if __name__ == "__main__":
