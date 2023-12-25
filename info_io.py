@@ -1,3 +1,10 @@
+import math
+
+
+def rcs_to_dB(rcs_m2, reference_value=1.0):
+    return 10 * math.log10(rcs_m2 / reference_value)
+
+
 def load_E_field(path):
     E_field_table = {}
     try:
@@ -51,9 +58,36 @@ def load_E_field(path):
         return E_field_table, sample_num, frequency
     except FileNotFoundError:
         print('E-field information not found!')
-        
 
-def single_RCS_output(RCS_table):
+
+def load_RCS(path):
+    RCS_table = {}
+    try:
+        with open(path, 'r') as file:
+            line = file.readline()
+            while line != ('Theta [deg.]  Phi   [deg.]  Abs(RCS )[dB(m^2)]   Abs(Theta)[dB(m^2)]  Phase(Theta)[deg.]  '
+                           'Abs(Phi  )[dB(m^2)]  Phase(Phi  )[deg.]  Ax.Ratio[dB    ]    \n'):
+                line = file.readline()
+            line = file.readline()
+            line = file.readline()
+            # Store the RCS data
+            while line:
+                theta = float(line[:8])
+                phi = float(line[9:25])
+                RCS_value = float(line[26:46])
+
+                angle = (phi, theta)
+                RCS_table[angle] = RCS_value
+                line = file.readline()
+        return RCS_table
+
+    except FileNotFoundError:
+        print('RCS information not found!')
+
+
+def single_RCS_output(RCS_table, use_dB=False):
     for angles, RCS_value in RCS_table.items():
-        print('RCS: σ( θ=', angles[1], ',φ=', angles[0], ')=', RCS_value)
-
+        if use_dB:
+            print('RCS: σ( θ=', angles[1], ',φ=', angles[0], ')=', rcs_to_dB(RCS_value))
+        else:
+            print('RCS: σ( θ=', angles[1], ',φ=', angles[0], ')=', RCS_value)

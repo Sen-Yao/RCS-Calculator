@@ -1,7 +1,7 @@
 import os
 import argparse
 
-from info_io import load_E_field
+from info_io import load_E_field, single_RCS_output, load_RCS
 from RCS_Table import RCS_Table
 
 
@@ -31,16 +31,25 @@ def main():
             if filename[0:2] == 'E_' and filename[-4:] == '.txt':
                 Table = RCS_Table(args.R, args.Ei)
                 Table.E_table, Table.sample_num, Table.frequency = load_E_field(os.path.join(args.path, filename))
+                Table.frequency_str = filename[2:-4]
+
                 Table.calculate_single_direction_RCS()
+
                 Table.calculate_total_RCS()
                 RCS_Table_list.append(Table)
+            if filename[0:4] == 'RCS_' and filename[-4:] == '.txt':
+                for Table in RCS_Table_list:
+                    if Table.frequency_str == filename[4:-4]:
+                        Table.CST_table = load_RCS(os.path.join(args.path, filename))
+                        Table.check_single_RCS()
+
     for Table in RCS_Table_list:
         if 1000 < Table.frequency < 1000000:
             frequency_str = str(int(Table.frequency/1000))+'kHz'
-        if 1000000 < Table.frequency < 1000000000:
+        elif 1000000 < Table.frequency < 1000000000:
             frequency_str = str(int(Table.frequency / 1000000)) + 'MHz'
         else:
-            frequency_str = str(int(Table.frequency))+'kHz'
+            frequency_str = str(int(Table.frequency))+'Hz'
 
         print('When Frequency =', frequency_str+', the total RCS =', Table.total_RCS)
 
