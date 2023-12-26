@@ -19,33 +19,31 @@ This script calculates the RCS for varying scattering directions (θs, φs) usin
 ## Requirements
 
 - python 3.8
+- tqdm
 
 ## Usage
+
+Preset electric field intensity data calculated by CST is integrated into the /data folder. To calculate RCS based on your custom electric field intensity data, use the --path argument to specify the data folder. If you have RCS data in the scattering direction calculated by CST, export them and place them in the data folder. The script can automatically detect and process scattering direction RCS.
 
 To run the script, use the following command:
 
 ```
-main.py [-u] [--path] [--Ei] [--theta] [--phi] [--R]
+main.py [--path] [--Ei] [--R]
 ```
 
 *optional arguments*:
 
-``-u, --unit``    The unit of angle (e.g., degree, radian).
 
-``--path -p ``    Path to E-field.txt's folder
+``--path -p ``    Path to electric field intensity data's folder
 
 ``--Ei -E``    Mode of incident electric field
-
-``--theta -t``    Incidence theta angle (in degrees).
-
-``--phi -p``    Incidence theta angle (in degrees).
 
 ``--R -R``    Distance between the far field point and the target.
 
 Example Usage:
 
 ```
-python main.py -E 1 -theta 0 -phi 0 -R 1
+python main.py -E 1 -R 1
 ```
 
 ## Contributors
