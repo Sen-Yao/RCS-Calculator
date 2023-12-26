@@ -28,26 +28,28 @@ class RCS_Table:
         delta_phi = 360 / (self.sample_num[0] - 1)
         delta_theta = 180 / (self.sample_num[1] - 1)
 
-        for angles, RCS_value in self.RCS_table.items():
+        for angles, RCS_value in self.RCS_table.items( ):
             # When theta = 0 or 180, area approx 0
             if angles[1] == 0 or angles[1] == 180:
-                area = math.radians(delta_theta/2) * math.radians(delta_phi) * math.sin(math.radians(delta_theta/2)) / 2
+                area = self.Ei ** 2 * math.radians(delta_theta / 2) * math.radians(delta_phi) * math.sin(
+                    math.radians(delta_theta / 2)) / 2
             else:
-                area = ((math.radians(delta_theta) / 2) *
-                        (math.radians(delta_phi) * math.sin(math.radians(angles[1]-delta_theta/2))
-                        + math.radians(delta_phi) * math.sin(math.radians(angles[1]+delta_theta/2))))
+                area = self.Ei ** 2 * ((math.radians(delta_theta) / 2) *
+                                       (math.radians(delta_phi) * math.sin(math.radians(angles[1] - delta_theta / 2))
+                                        + math.radians(delta_phi) * math.sin(
+                                                   math.radians(angles[1] + delta_theta / 2))))
             total_RCS_value += ((area * RCS_value) / (4 * math.pi))
         self.total_RCS = total_RCS_value
 
     def check_single_RCS(self):
-        for angles, result_RCS in self.RCS_table.items():
+        for angles, result_RCS in self.RCS_table.items( ):
             if abs(self.CST_table[angles] - rcs_to_dB(result_RCS)) > 0.01:
                 warnings.warn('Error! When θ=' + str(angles[1]) + ',φ=' + str(angles[0]) + ')=, result RCS=' +
                               str(rcs_to_dB(result_RCS)) + 'dB, but RCS from CST=' + str(self.CST_table[angles]))
 
     def remove_redundancy_table(self):
         angles_to_remove = []
-        for angles, E in self.E_table.items():
+        for angles, E in self.E_table.items( ):
             if angles[0] == 360:
                 angles_to_remove.append(angles)
         for angles in angles_to_remove:
