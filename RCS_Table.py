@@ -31,10 +31,10 @@ class RCS_Table:
         for angles, RCS_value in self.RCS_table.items( ):
             # When theta = 0 or 180, area approx 0
             if angles[1] == 0 or angles[1] == 180:
-                area = self.Ei ** 2 * math.radians(delta_theta / 2) * math.radians(delta_phi) * math.sin(
+                area = self.R ** 2 * math.radians(delta_theta / 2) * math.radians(delta_phi) * math.sin(
                     math.radians(delta_theta / 2)) / 2
             else:
-                area = self.Ei ** 2 * ((math.radians(delta_theta) / 2) *
+                area = self.R ** 2 * ((math.radians(delta_theta) / 2) *
                                        (math.radians(delta_phi) * math.sin(math.radians(angles[1] - delta_theta / 2))
                                         + math.radians(delta_phi) * math.sin(
                                                    math.radians(angles[1] + delta_theta / 2))))
