@@ -19,6 +19,7 @@ This script calculates the RCS for varying scattering directions (θs, φs) usin
 ## Requirements
 
 - python 3.8
+- tqdm
 
 ## Usage
 
